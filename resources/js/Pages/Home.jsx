@@ -6,15 +6,15 @@ export default function Dashboard() {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
+                    Home
                 </h2>
             }
         >
-            <Head title="Dashboard" />
+            <Head title="Home" />
 
             <div className="py-12">
-                <h1 className="text-xl text-blue-500 font-bold">
-                    This is a blue text
+                <h1 className="text-xl text-red-500 font-bold">
+                    This is a red text
                 </h1>
             </div>
         </AuthenticatedLayout>
