@@ -6,7 +6,7 @@ use App\Models\Gallery;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\URL;
 
 class GalleryController extends Controller
 {
@@ -27,15 +27,21 @@ class GalleryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("CreateGallery");
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $name = $request->name;
+        $u_id = $request->user_id;
+        Gallery::create([
+            'name' => $name,
+            'user_id' => $u_id,
+        ]);
+        return back()->with('message', 'Gallery created successfully!');
     }
 
     /**
@@ -70,6 +76,8 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        //
+        Gallery::find($gallery)->first()->delete();
+
+        return back();
     }
 }
