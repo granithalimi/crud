@@ -1,10 +1,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import { Input } from 'postcss';
 import { useState, useEffect } from 'react';
 
 export default function Gallery({ gallery, user }) {
+    const { delete:destroy, post } = useForm()
 
+    const dely = e => {
+        if(confirm("are you sure")){
+            destroy(route('galleries.destroy', e))
+        }
+    }
+    const uppy = e => {
+        post(route('galleries.edit', e))
+    }
     return (
         <AuthenticatedLayout
             header={
@@ -21,10 +31,10 @@ export default function Gallery({ gallery, user }) {
                         <h1 className="text-center mx-auto font-semibold text-xl">Back</h1>
                     </Link>
                     <div className="flex gap-3 my-10">
-                        {
-                            gallery &&
-                            <h1>{gallery[0].name} created by / {user.name}</h1>
-                        }
+                        <h1><span className="font-bold">{gallery.name}</span> created by / <span className="font-bold">{user.name}</span></h1>
+                        <button onClick={e => dely(gallery.id)}>del</button>
+                        <br></br>
+                        <Link href={route('galleries.edit', gallery.id)}>update</Link>
                     </div>
                 </div>
             </div>

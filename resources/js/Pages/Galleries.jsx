@@ -6,15 +6,9 @@ import { useState, useEffect } from 'react';
 export default function Gallery({ galleries }) {
     const [g, setg] = useState([])
 
-    const { delete:destroy } = useForm()
-
     useEffect(() => {
         setg(galleries)
     }, [])
-
-    const handleDel = e => {
-        destroy(route('galleries.destroy', e))
-    }
     return (
         <AuthenticatedLayout
             header={
@@ -39,12 +33,9 @@ export default function Gallery({ galleries }) {
                         {
                             (g && g.length > 0) &&
                             g.map((gallery) => (
-                                <div key={gallery.id}>
-                                    <Link href={route('galleries.show', gallery.id)} key={gallery.id} className="px-5 border-2 border-blue-500 rounded-lg hover:bg-blue-400 cursor-pointer flex items-center duration-300">
-                                        <h1>{gallery.id}. {gallery.name} created by /<span className="font-bold">{gallery.user.name}</span></h1>
-                                    </Link>
-                                    <button onClick={e => handleDel(gallery.id)}>delete</button>
-                                </div>
+                                <Link href={route('galleries.show', gallery.id)} key={gallery.id} className="px-5 border-2 border-blue-500 rounded-lg hover:bg-blue-400 cursor-pointer flex items-center duration-300">
+                                    <h1>{gallery.id}. {gallery.name} created by /<span className="font-bold">{gallery.user.name}</span></h1>
+                                </Link>
                             ))
                         }
                     </div>

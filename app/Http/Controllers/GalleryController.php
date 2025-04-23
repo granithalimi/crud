@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gallery;
 use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\URL;
@@ -36,12 +37,12 @@ class GalleryController extends Controller
     public function store(Request $request)
     {   
         $name = $request->name;
-        $u_id = $request->user_id;
+        $u_id = auth()->id();
         Gallery::create([
             'name' => $name,
             'user_id' => $u_id,
         ]);
-        return back()->with('message', 'Gallery created successfully!');
+        return back();
     }
 
     /**
@@ -50,7 +51,7 @@ class GalleryController extends Controller
     public function show(Gallery $gallery)
     {
         return Inertia::render('Gallery', [
-            'gallery' => Gallery::find($gallery),
+            'gallery' => Gallery::find($gallery->id),
             'user' => Gallery::where('id', $gallery->id)->first()->user()->first(),
         ]);
     }
@@ -60,7 +61,9 @@ class GalleryController extends Controller
      */
     public function edit(Gallery $gallery)
     {
-        //
+        return Inertia::render("UpdateGallery", [
+            'gallery' => Gallery::find($gallery->id)
+        ]);
     }
 
     /**
@@ -69,6 +72,8 @@ class GalleryController extends Controller
     public function update(Request $request, Gallery $gallery)
     {
         //
+        $gallery->update(['name' => $request->name]);
+        return redirect()->route('galleries.index');
     }
 
     /**
@@ -76,8 +81,7 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        Gallery::find($gallery)->first()->delete();
-
-        return back();
+        Gallery::where('id', $gallery->id)->delete();
+        return to_route('galleries.index');
     }
 }
