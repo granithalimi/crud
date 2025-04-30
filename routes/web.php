@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('/galleries', GalleryController::class);
-    Route::resource('/pictures', PictureController::class)->only(['store']);
+    Route::resource('/pictures', PictureController::class)->only(['store', 'destroy']);
 });
 
 require __DIR__ . '/auth.php';

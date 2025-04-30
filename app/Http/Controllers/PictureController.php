@@ -29,13 +29,25 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
-        //]
-        Picture::create([
-            'name' => $request->name,
-            'gallery_id' => $request->id,
+        //
+
+        $request->validate([
+            'pic' => 'required|image|',
         ]);
-        
-        return redirect()->route('galleries.index');
+
+        if($request->hasFile('pic')){
+            $path = $request->pic->store("pic", 'public');
+
+            Picture::create([
+                'name' => $request->name,
+                'gallery_id' => $request->id,
+                'path' => $path,
+            ]);
+
+            return redirect()->route('galleries.index');
+        }
+
+        dd($request->all());
     }
 
     /**
@@ -67,6 +79,7 @@ class PictureController extends Controller
      */
     public function destroy(Picture $picture)
     {
-        //
+        Picture::where('id', $picture->id)->delete();
+        return redirect()->route('galleries.index');
     }
 }

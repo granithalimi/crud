@@ -4,11 +4,12 @@ import { Link } from '@inertiajs/react';
 import { Input } from 'postcss';
 import { useState, useEffect } from 'react';
 
-export default function Gallery({ gallery, user }) {
+export default function Gallery({ gallery, user, images }) {
     const { data, setData, delete:destroy, post } = useForm({
         pic : null,
+        path : "storage/public/images/",
         name : 'testing',
-        id : gallery.id
+        id : gallery.id,
     })
     
     const dely = e => {
@@ -23,6 +24,9 @@ export default function Gallery({ gallery, user }) {
     const handleSubmit = e => {
         e.preventDefault()
         post(route('pictures.store', gallery.id))
+    }
+    const deleteImage = id => {
+        destroy(route('pictures.destroy', id))
     }
     return (
         <AuthenticatedLayout
@@ -46,9 +50,21 @@ export default function Gallery({ gallery, user }) {
                         <Link href={route('galleries.edit', gallery.id)}>update</Link>
                     </div>
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
-                        <input type="file" onChange={e => setData("pic", e.target.value)} />
+                        <input type="text" name="name" placeholder="Image Name" onChange={e => setData("name", e.target.value)} />
+                        <input type="file" name="pic" onChange={e => setData("pic", e.target.files[0])} />
                         <button type="submit">Add Picture</button>
                     </form>
+                    <div>
+                        {
+                            images && images.length > 0 &&
+                            images.map((img, ind) => (
+                                <div key={ind} className="mb-10">
+                                    <img className="w-1/2" src={`${window.location.origin}/storage/${img.path}`} />
+                                    <button onClick={e => deleteImage(img.id)} className="px-3 py-1 bg-red-400 text-white rounded-lg">Delete</button>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>

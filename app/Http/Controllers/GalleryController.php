@@ -53,6 +53,7 @@ class GalleryController extends Controller
         return Inertia::render('Gallery', [
             'gallery' => Gallery::find($gallery->id),
             'user' => Gallery::where('id', $gallery->id)->first()->user()->first(),
+            'images' => Gallery::find($gallery->id)->images()->get(), 
         ]);
     }
 
