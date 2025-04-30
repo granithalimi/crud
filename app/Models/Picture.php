@@ -9,6 +9,7 @@ class Picture extends Model
     protected $fillable = [
         'name',
         'gallery_id',
+        'path',
     ];
 
     public function gallery(){

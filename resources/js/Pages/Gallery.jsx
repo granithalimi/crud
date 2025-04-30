@@ -5,15 +5,24 @@ import { Input } from 'postcss';
 import { useState, useEffect } from 'react';
 
 export default function Gallery({ gallery, user }) {
-    const { delete:destroy, post } = useForm()
-
+    const { data, setData, delete:destroy, post } = useForm({
+        pic : null,
+        name : 'testing',
+        id : gallery.id
+    })
+    
     const dely = e => {
         if(confirm("are you sure")){
             destroy(route('galleries.destroy', e))
         }
     }
     const uppy = e => {
+        e.preventDefault()
         post(route('galleries.edit', e))
+    }
+    const handleSubmit = e => {
+        e.preventDefault()
+        post(route('pictures.store', gallery.id))
     }
     return (
         <AuthenticatedLayout
@@ -36,6 +45,10 @@ export default function Gallery({ gallery, user }) {
                         <br></br>
                         <Link href={route('galleries.edit', gallery.id)}>update</Link>
                     </div>
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                        <input type="file" onChange={e => setData("pic", e.target.value)} />
+                        <button type="submit">Add Picture</button>
+                    </form>
                 </div>
             </div>
         </AuthenticatedLayout>

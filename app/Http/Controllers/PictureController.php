@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Picture;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class PictureController extends Controller
 {
@@ -28,7 +29,13 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //]
+        Picture::create([
+            'name' => $request->name,
+            'gallery_id' => $request->id,
+        ]);
+        
+        return redirect()->route('galleries.index');
     }
 
     /**
